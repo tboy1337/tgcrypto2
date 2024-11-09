@@ -44,7 +44,7 @@ def cbc256_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes: ...
 ``` python
 import os
 
-import tgcrypto
+import tgcrypto2
 
 data = os.urandom(10 * 1024 * 1024 + 7)  # 10 MB of random data + 7 bytes to show padding
 key = os.urandom(32)  # Random Key
@@ -53,8 +53,8 @@ iv = os.urandom(32)  # Random IV
 # Pad with zeroes: -7 % 16 = 9
 data += bytes(-len(data) % 16)
 
-ige_encrypted = tgcrypto.ige256_encrypt(data, key, iv)
-ige_decrypted = tgcrypto.ige256_decrypt(ige_encrypted, key, iv)
+ige_encrypted = tgcrypto2.ige256_encrypt(data, key, iv)
+ige_decrypted = tgcrypto2.ige256_decrypt(ige_encrypted, key, iv)
 
 print(data == ige_decrypted)  # True
 ```
@@ -64,7 +64,7 @@ print(data == ige_decrypted)  # True
 ``` python
 import os
 
-import tgcrypto
+import tgcrypto2
 
 data = os.urandom(10 * 1024 * 1024)  # 10 MB of random data
 
@@ -73,8 +73,8 @@ key = os.urandom(32)  # Random Key
 enc_iv = bytearray(os.urandom(16))  # Random IV
 dec_iv = enc_iv.copy()  # Keep a copy for decryption
 
-ctr_encrypted = tgcrypto.ctr256_encrypt(data, key, enc_iv, bytes(1))
-ctr_decrypted = tgcrypto.ctr256_decrypt(ctr_encrypted, key, dec_iv, bytes(1))
+ctr_encrypted = tgcrypto2.ctr256_encrypt(data, key, enc_iv, bytes(1))
+ctr_decrypted = tgcrypto2.ctr256_decrypt(ctr_encrypted, key, dec_iv, bytes(1))
 
 print(data == ctr_decrypted)  # True
 ```
@@ -85,7 +85,7 @@ print(data == ctr_decrypted)  # True
 import os
 from io import BytesIO
 
-import tgcrypto
+import tgcrypto2
 
 data = BytesIO(os.urandom(10 * 1024 * 1024))  # 10 MB of random data
 
@@ -107,7 +107,7 @@ while True:
         break
 
     # Write 1K encrypted bytes into the encrypted data buffer
-    encrypted_data.write(tgcrypto.ctr256_encrypt(chunk, key, enc_iv, enc_state))
+    encrypted_data.write(tgcrypto2.ctr256_encrypt(chunk, key, enc_iv, enc_state))
 
 # Reset position. We need to read it now
 encrypted_data.seek(0)
@@ -119,7 +119,7 @@ while True:
         break
 
     # Write 1K decrypted bytes into the decrypted data buffer
-    decrypted_data.write(tgcrypto.ctr256_decrypt(chunk, key, dec_iv, dec_state))
+    decrypted_data.write(tgcrypto2.ctr256_decrypt(chunk, key, dec_iv, dec_state))
 
 print(data.getvalue() == decrypted_data.getvalue())  # True
 ```
@@ -131,7 +131,7 @@ print(data.getvalue() == decrypted_data.getvalue())  # True
 ``` python
 import os
 
-import tgcrypto
+import tgcrypto2
 
 data = os.urandom(10 * 1024 * 1024 + 7)  # 10 MB of random data + 7 bytes to show padding
 key = os.urandom(32)  # Random Key
@@ -142,16 +142,16 @@ dec_iv = enc_iv.copy()  # Keep a copy for decryption
 # Pad with zeroes: -7 % 16 = 9
 data += bytes(-len(data) % 16)
 
-cbc_encrypted = tgcrypto.cbc256_encrypt(data, key, enc_iv)
-cbc_decrypted = tgcrypto.cbc256_decrypt(cbc_encrypted, key, dec_iv)
+cbc_encrypted = tgcrypto2.cbc256_encrypt(data, key, enc_iv)
+cbc_decrypted = tgcrypto2.cbc256_decrypt(cbc_encrypted, key, dec_iv)
 
 print(data == cbc_decrypted)  # True
 ```
 
 ## Testing
 
-1. Clone this repository: `git clone https://github.com/pyrogram/tgcrypto`.
-2. Enter the directory: `cd tgcrypto`.
+1. Clone this repository: `git clone https://github.com/tboy1337/tgcrypto2`.
+2. Enter the directory: `cd tgcrypto2`.
 3. Install `tox`: `pip3 install tox`
 4. Run tests: `tox`.
 
