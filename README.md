@@ -1,9 +1,9 @@
-# TgCrypto
+# TgCrypto2
 
 > Fast and Portable Cryptography Extension Library for Pyrogram
 
-**TgCrypto** is a Cryptography Library written in C as a Python extension. It is designed to be portable, fast,
-easy to install and use. TgCrypto is intended for [Pyrogram](https://github.com/pyrogram/pyrogram) and implements the
+**TgCrypto2** is a Cryptography Library written in C as a Python extension. It is designed to be portable, fast,
+easy to install and use. TgCrypto2 is intended for [Pyrogram](https://github.com/pyrogram/pyrogram) and implements the
 cryptographic algorithms Telegram requires, namely:
 
 - **`AES-256-IGE`** - used in [MTProto v2.0](https://core.telegram.org/mtproto).
@@ -22,7 +22,7 @@ $ pip3 install -U tgcrypto2
 
 ## API
 
-TgCrypto API consists of these six methods:
+TgCrypto2 API consists of these six methods:
 
 ```python
 def ige256_encrypt(data: bytes, key: bytes, iv: bytes) -> bytes: ...
