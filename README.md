@@ -17,7 +17,7 @@ cryptographic algorithms Telegram requires, namely:
 ## Installation
 
 ``` bash
-$ pip3 install -U tgcrypto
+$ pip3 install -U tgcrypto2
 ```
 
 ## API
