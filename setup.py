@@ -66,7 +66,7 @@ setup(
         "Documentation": "https://docs.pyrogram.org",
     },
     python_requires="~=3.7",
-    packages=find_packages(),
+    packages=find_packages(exclude=["tests*"]),
     test_suite="tests",
     zip_safe=False,
     ext_modules=[
