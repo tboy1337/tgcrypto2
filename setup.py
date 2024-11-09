@@ -22,7 +22,7 @@ with open("README.md", encoding="utf-8") as f:
     readme = f.read()
 
 setup(
-    name="TgCrypto",
+    name="TgCrypto2",
     version="1.2.7",
     description="Fast and Portable Cryptography Extension Library for Pyrogram",
     long_description=readme,
