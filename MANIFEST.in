@@ -1,3 +1,11 @@
-## Include
+## Include license files
 include COPYING COPYING.lesser NOTICE
+
+## Include C source files
 recursive-include tgcrypto *.c *.h
+
+## Include tests
+recursive-include tests *
+
+## Include documentation
+include README.md
