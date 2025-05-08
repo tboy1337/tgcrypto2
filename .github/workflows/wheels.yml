@@ -41,7 +41,7 @@ jobs:
       - name: Store wheels
         uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.os }}-${{ matrix.python-version }}
+          name: wheels-${{ matrix.os }}-py${{ matrix.python-version }}
           path: ./wheelhouse/*.whl
 
   publish:
@@ -50,12 +50,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download artifacts
+      - name: Create dist directory
+        run: mkdir -p dist
+
+      - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: dist-*
-          merge-multiple: true
-          path: dist
+          pattern: wheels-*
+          path: all-wheels
+          merge-multiple: false
+
+      - name: Move all wheels to dist directory
+        run: |
+          find all-wheels -type f -name "*.whl" -exec cp {} dist/ \;
+          ls -la dist/
 
       - name: Setup python
         uses: actions/setup-python@v5
