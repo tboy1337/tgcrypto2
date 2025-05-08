@@ -32,8 +32,7 @@ jobs:
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
           CIBW_BUILD: "cp3{9,10,11,12,13}-*"
           CIBW_SKIP: "cp37-* cp38-*"
-          # Skip the test phase for now since tests are failing
-          CIBW_TEST_SKIP: "*"
+          # Tests are now enabled
           CIBW_TEST_REQUIRES: tox
           CIBW_TEST_COMMAND: cd {project} && tox -e py
           CIBW_BUILD_VERBOSITY: 1

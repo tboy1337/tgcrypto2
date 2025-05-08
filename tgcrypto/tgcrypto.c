@@ -121,11 +121,17 @@ static PyObject *ctr256_encrypt(PyObject *self, PyObject *args) {
     PyBuffer_Release(&data);
     PyBuffer_Release(&key);
     PyBuffer_Release(&iv);
+    PyBuffer_Release(&state);
 
     out = Py_BuildValue("y#", buf, data.len);
     free(buf);
 
     return out;
+}
+
+static PyObject *ctr256_decrypt(PyObject *self, PyObject *args) {
+    // CTR mode uses the same function for both encrypt and decrypt
+    return ctr256_encrypt(self, args);
 }
 
 static PyObject *cbc(PyObject *args, uint8_t encrypt) {
@@ -224,7 +230,7 @@ static PyMethodDef methods[] = {
     {"ige256_encrypt", (PyCFunction) ige256_encrypt, METH_VARARGS, ige256_encrypt_docs},
     {"ige256_decrypt", (PyCFunction) ige256_decrypt, METH_VARARGS, ige256_decrypt_docs},
     {"ctr256_encrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, ctr256_encrypt_docs},
-    {"ctr256_decrypt", (PyCFunction) ctr256_encrypt, METH_VARARGS, ctr256_decrypt_docs},
+    {"ctr256_decrypt", (PyCFunction) ctr256_decrypt, METH_VARARGS, ctr256_decrypt_docs},
     {"cbc256_encrypt", (PyCFunction) cbc256_encrypt, METH_VARARGS, cbc256_encrypt_docs},
     {"cbc256_decrypt", (PyCFunction) cbc256_decrypt, METH_VARARGS, cbc256_decrypt_docs},
     {NULL}
