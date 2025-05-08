@@ -46,8 +46,12 @@ jobs:
           CIBW_TEST_COMMAND_WINDOWS: >
             cd {project} &&
             python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
-            python -c "import sys; import os; py_ver = sys.version_info; exit_code = 0 if py_ver >= (3, 13) else 1; sys.exit(exit_code)" &&
-            (if %ERRORLEVEL% EQU 0 (tox -e py313 -- -v) else (tox -e py -- -v))
+            python -c "import sys; is_py313 = sys.version_info >= (3, 13); print('Python version: %s.%s' % sys.version_info[:2]); sys.exit(0 if is_py313 else 1)" &&
+            if errorlevel 1 (
+              tox -e py -- -v
+            ) else (
+              tox -e py313 -- -v
+            )
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Store wheels
