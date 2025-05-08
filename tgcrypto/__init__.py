@@ -2,7 +2,7 @@
 Fast and Portable Cryptography Extension Library for Pyrogram
 """
 
-__version__ = "1.3.1"
+__version__ = "1.3.2"
 
 # Import the C extension functions directly into the package namespace
 from tgcrypto import (
