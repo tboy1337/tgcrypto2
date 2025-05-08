@@ -72,7 +72,7 @@ commands = pytest {posargs}
 """
 
 [[tool.setuptools.ext-modules]]
-name = "tgcrypto"
+name = "_tgcrypto"
 sources = [
     "tgcrypto/tgcrypto.c",
     "tgcrypto/aes256.c",

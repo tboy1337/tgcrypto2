@@ -238,12 +238,12 @@ static PyMethodDef methods[] = {
 
 static struct PyModuleDef module = {
     PyModuleDef_HEAD_INIT,
-    "TgCrypto",
+    "_TgCrypto",
     DESCRIPTION,
     -1,
     methods
 };
 
-PyMODINIT_FUNC PyInit_tgcrypto(void) {
+PyMODINIT_FUNC PyInit__tgcrypto(void) {
     return PyModule_Create(&module);
 }
