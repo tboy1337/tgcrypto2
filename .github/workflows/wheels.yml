@@ -37,13 +37,17 @@ jobs:
           # Use a different test command for Python 3.13
           CIBW_TEST_COMMAND: >
             cd {project} &&
-            if [[ "{python_version}" == *"3.13"* ]]; then
-              python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
+            python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
+            if python -c "import sys; exit(0 if sys.version_info >= (3, 13) else 1)"; then
               tox -e py313 -- -v
             else
-              python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
               tox -e py -- -v
             fi
+          CIBW_TEST_COMMAND_WINDOWS: >
+            cd {project} &&
+            python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
+            python -c "import sys; import os; py_ver = sys.version_info; exit_code = 0 if py_ver >= (3, 13) else 1; sys.exit(exit_code)" &&
+            (if %ERRORLEVEL% EQU 0 (tox -e py313 -- -v) else (tox -e py -- -v))
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Store wheels
