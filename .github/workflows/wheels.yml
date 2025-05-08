@@ -38,8 +38,10 @@ jobs:
           CIBW_TEST_COMMAND: >
             cd {project} &&
             if [[ "{python_version}" == *"3.13"* ]]; then
+              python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
               tox -e py313 -- -v
             else
+              python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
               tox -e py -- -v
             fi
           CIBW_BUILD_VERBOSITY: 1
