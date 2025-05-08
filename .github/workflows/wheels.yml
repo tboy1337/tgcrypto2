@@ -34,7 +34,14 @@ jobs:
           CIBW_SKIP: "cp37-* cp38-*"
           # Tests are now enabled
           CIBW_TEST_REQUIRES: tox
-          CIBW_TEST_COMMAND: cd {project} && tox -e py
+          # Use a different test command for Python 3.13
+          CIBW_TEST_COMMAND: >
+            cd {project} &&
+            if [[ "{python_version}" == *"3.13"* ]]; then
+              tox -e py313 -- -v
+            else
+              tox -e py -- -v
+            fi
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Store wheels

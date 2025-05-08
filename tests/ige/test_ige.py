@@ -24,10 +24,10 @@ import tgcrypto
 
 
 class TestIGE256Input(unittest.TestCase):
-    TYPE_ERROR_PATTERN = r"'\w+' does not (support|have) the buffer interface|a bytes-like object is required, not '\w+'"
+    TYPE_ERROR_PATTERN = r"(('\w+' does not (support|have) the buffer interface)|('a bytes-like object is required, not \'\w+\''))"
 
     def test_ige256_encrypt_invalid_args_count(self):
-        with self.assertRaisesRegex(TypeError, r"function takes exactly \d arguments \(\d given\)"):
+        with self.assertRaisesRegex(TypeError, r"(function takes exactly \d arguments \(\d given\)|takes \d positional arguments but \d were given)"):
             tgcrypto.ige256_encrypt(os.urandom(16), os.urandom(32))
 
     def test_ige256_encrypt_invalid_args_type(self):
@@ -47,7 +47,7 @@ class TestIGE256Input(unittest.TestCase):
             tgcrypto.ige256_encrypt(os.urandom(16), os.urandom(32), os.urandom(31))
 
     def test_ige256_decrypt_invalid_args_count(self):
-        with self.assertRaisesRegex(TypeError, r"function takes exactly \d arguments \(\d given\)"):
+        with self.assertRaisesRegex(TypeError, r"(function takes exactly \d arguments \(\d given\)|takes \d positional arguments but \d were given)"):
             tgcrypto.ige256_decrypt(os.urandom(16), os.urandom(32))
 
     def test_ige256_decrypt_invalid_args_type(self):
