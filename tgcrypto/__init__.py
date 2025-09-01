@@ -2,7 +2,7 @@
 Fast and Portable Cryptography Extension Library for Pyrogram
 """
 
-__version__ = "1.3.3"
+__version__ = "1.3.4"
 
 # Import from the C extension module
 try:

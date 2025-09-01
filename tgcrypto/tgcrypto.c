@@ -223,7 +223,7 @@ PyDoc_STRVAR(
     cbc256_decrypt_docs,
     "cbc256_decrypt(data, key, iv)\n"
     "--\n\n"
-    "AES-256-CBC Encryption"
+    "AES-256-CBC Decryption"
 );
 
 static PyMethodDef methods[] = {
