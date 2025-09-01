@@ -64,13 +64,6 @@ version = {attr = "tgcrypto.__version__"}
 [tool.pytest]
 testpaths = ["tests"]
 
-[tool.tox]
-legacy_tox_ini = """
-[testenv]
-deps = pytest
-commands = pytest {posargs}
-"""
-
 [[tool.setuptools.ext-modules]]
 name = "_tgcrypto"
 sources = [
