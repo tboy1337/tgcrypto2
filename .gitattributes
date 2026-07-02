@@ -1,0 +1,49 @@
+* text=auto
+
+# C extension sources
+*.c text eol=lf
+*.h text eol=lf
+
+# Python
+*.py text eol=lf
+*.pyi text eol=lf
+
+# Project metadata and docs
+*.toml text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.in text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# NIST test vectors
+*.rsp text eol=lf
+
+# Legal and repo housekeeping
+COPYING text eol=lf
+COPYING.lesser text eol=lf
+NOTICE text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+
+# Windows-native scripts (use CRLF if added later)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=lf
+
+# Binary build artifacts (normally gitignored)
+*.pyd binary
+*.so binary
+*.dll binary
+*.dylib binary
+*.whl binary
+*.egg binary
+
+# Exclude from source archives created via `git archive`
+.github export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.tox export-ignore
+.pytest_cache export-ignore

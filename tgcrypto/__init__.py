@@ -2,7 +2,7 @@
 Fast and Portable Cryptography Extension Library for Pyrogram
 """
 
-__version__ = "1.3.5"
+__version__ = "1.3.6"
 
 # Import from the C extension module
 try:
@@ -11,9 +11,11 @@ try:
         ctr256_encrypt, ctr256_decrypt,
         cbc256_encrypt, cbc256_decrypt
     )
-except ImportError:
-    # Fallback to an alternate import method if needed
-    raise ImportError("Failed to import _tgcrypto extension module")
+except ImportError as exc:
+    raise ImportError(
+        "Failed to import _tgcrypto extension module; "
+        "ensure the C extension was built and installed"
+    ) from exc
 
 __all__ = [
     "ige256_encrypt", "ige256_decrypt",

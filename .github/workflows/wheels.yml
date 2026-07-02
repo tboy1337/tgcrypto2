@@ -4,23 +4,27 @@ on:
   push:
     branches:
       - master
+    tags:
+      - "v*"
+  workflow_dispatch:
 
 jobs:
-  build_wheels_legacy:
-    name: Build legacy wheels (3.7-3.8)
+  build_wheels:
+    name: Build wheels (3.9-3.14)
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.23.3
+        uses: pypa/cibuildwheel@v3.4.1
         env:
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
-          CIBW_BUILD: "cp3{7,8}-*"
+          CIBW_BUILD: "cp3{9,10,11,12,13,14}-*"
+          CIBW_SKIP: "cp3??t-*"
           CIBW_TEST_REQUIRES: tox
           CIBW_TEST_COMMAND: >
             cd {project} &&
@@ -31,44 +35,15 @@ jobs:
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Store wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: wheels-legacy-${{ matrix.os }}
-          path: ./wheelhouse/*.whl
-
-  build_wheels_modern:
-    name: Build modern wheels (3.9-3.13)
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build wheels
-        uses: pypa/cibuildwheel@v2.23.3
-        env:
-          CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
-          CIBW_BUILD: "cp3{9,10,11,12,13}-*"
-          CIBW_TEST_REQUIRES: tox
-          CIBW_TEST_COMMAND: >
-            cd {project} &&
-            python -c "import sys, subprocess; env='py{}{}'.format(*sys.version_info[:2]); exit(subprocess.call(['tox', '-e', env, '--', '-v']))"
-          CIBW_TEST_COMMAND_WINDOWS: >
-            cd {project} &&
-            python -c "import sys, subprocess; env='py{}{}'.format(*sys.version_info[:2]); exit(subprocess.call(['tox', '-e', env, '--', '-v']))"
-          CIBW_BUILD_VERBOSITY: 1
-
-      - name: Store wheels
-        uses: actions/upload-artifact@v4
-        with:
-          name: wheels-modern-${{ matrix.os }}
+          name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
   publish:
     name: Publish wheels to PyPI
-    needs: [build_wheels_legacy, build_wheels_modern]
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build_wheels]
     runs-on: ubuntu-latest
 
     steps:
@@ -76,7 +51,7 @@ jobs:
         run: mkdir -p dist
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: wheels-*
           path: all-wheels
@@ -88,9 +63,9 @@ jobs:
           ls -la dist/
 
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.13'
+          python-version: '3.14'
 
       - name: Install Twine
         run: |

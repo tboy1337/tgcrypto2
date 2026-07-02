@@ -2,6 +2,15 @@
 
 > Fast and Portable Cryptography Extension Library for Pyrogram
 
+## About this fork
+
+[TgCrypto2](https://github.com/tboy1337/tgcrypto2) is a maintained fork of the original
+[pyrogram/tgcrypto](https://github.com/pyrogram/tgcrypto) project, which was archived in December 2024.
+The cryptographic core is preserved from upstream; this fork adds modern packaging, newer Python support,
+and bug fixes (such as a CTR buffer cleanup leak in the C bindings).
+
+As noted in the upstream repository, the algorithm implementations are intended for educational purposes.
+
 **TgCrypto2** is a Cryptography Library written in C as a Python extension. It is designed to be portable, fast,
 easy to install and use. TgCrypto2 is intended for [Pyrogram](https://github.com/pyrogram/pyrogram) and implements the
 cryptographic algorithms Telegram requires, namely:
@@ -12,7 +21,7 @@ cryptographic algorithms Telegram requires, namely:
 
 ## Requirements
 
-- Python 3.7 or higher.
+- Python 3.9 or higher.
 
 ## Installation
 

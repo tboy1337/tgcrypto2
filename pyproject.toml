@@ -7,7 +7,7 @@ name = "tgcrypto2"
 dynamic = ["version"]
 description = "Fast and Portable Cryptography Extension Library for Pyrogram"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9,<4.0"
 license = "LGPL-3.0-or-later"
 license-files = ["COPYING", "COPYING.lesser", "NOTICE"]
 authors = [
@@ -21,8 +21,6 @@ classifiers = [
     "Programming Language :: C",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
