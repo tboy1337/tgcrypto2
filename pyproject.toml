@@ -1,16 +1,18 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=75", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "TgCrypto2"
-version = "1.3.4"
+name = "tgcrypto2"
+dynamic = ["version"]
 description = "Fast and Portable Cryptography Extension Library for Pyrogram"
 readme = "README.md"
 requires-python = ">=3.7"
 license = "LGPL-3.0-or-later"
+license-files = ["COPYING", "COPYING.lesser", "NOTICE"]
 authors = [
-    {name = "Dan", email = "dan@pyrogram.org"}
+    {name = "Dan", email = "dan@pyrogram.org"},
+    {name = "tboy1337"},
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -26,6 +28,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
@@ -35,41 +38,42 @@ classifiers = [
     "Topic :: Communications",
     "Topic :: Communications :: Chat",
     "Topic :: Software Development :: Libraries",
-    "Topic :: Software Development :: Libraries :: Python Modules"
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 keywords = ["pyrogram", "telegram", "crypto", "cryptography", "encryption", "mtproto", "extension", "library", "aes"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
 
 [project.urls]
-"Homepage" = "https://github.com/pyrogram"
-"Download" = "https://github.com/pyrogram/tgcrypto/releases/latest"
-"Tracker" = "https://github.com/pyrogram/tgcrypto/issues"
-"Community" = "https://t.me/pyrogram"
-"Source" = "https://github.com/pyrogram/tgcrypto"
-"Documentation" = "https://docs.pyrogram.org"
+Homepage = "https://github.com/tboy1337/tgcrypto2"
+Source = "https://github.com/tboy1337/tgcrypto2"
+Issues = "https://github.com/tboy1337/tgcrypto2/issues"
+Documentation = "https://github.com/tboy1337/tgcrypto2#readme"
+
+[tool.setuptools.dynamic]
+version = {attr = "tgcrypto.__version__"}
 
 [tool.setuptools]
 packages = ["tgcrypto"]
 zip-safe = false
 include-package-data = true
+ext-modules = [
+    {name = "_tgcrypto", sources = [
+        "tgcrypto/tgcrypto.c",
+        "tgcrypto/aes256.c",
+        "tgcrypto/ige256.c",
+        "tgcrypto/ctr256.c",
+        "tgcrypto/cbc256.c",
+    ]},
+]
 
 [tool.setuptools.exclude-package-data]
 "*" = ["*.c", "*.h"]
 
 [tool.setuptools.package-data]
-"tgcrypto" = ["*.c", "*.h"]
+tgcrypto = ["*.c", "*.h"]
 
-[tool.setuptools.dynamic]
-version = {attr = "tgcrypto.__version__"}
-
-[tool.pytest]
+[tool.pytest.ini_options]
 testpaths = ["tests"]
-
-[[tool.setuptools.ext-modules]]
-name = "_tgcrypto"
-sources = [
-    "tgcrypto/tgcrypto.c",
-    "tgcrypto/aes256.c",
-    "tgcrypto/ige256.c",
-    "tgcrypto/ctr256.c",
-    "tgcrypto/cbc256.c"
-]

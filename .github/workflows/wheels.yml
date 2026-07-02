@@ -6,58 +6,69 @@ on:
       - master
 
 jobs:
-  build_wheels:
-    name: Build wheels
+  build_wheels_legacy:
+    name: Build legacy wheels (3.7-3.8)
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.23.3
+        env:
+          CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
+          CIBW_BUILD: "cp3{7,8}-*"
+          CIBW_TEST_REQUIRES: tox
+          CIBW_TEST_COMMAND: >
+            cd {project} &&
+            python -c "import sys, subprocess; env='py{}{}'.format(*sys.version_info[:2]); exit(subprocess.call(['tox', '-e', env, '--', '-v']))"
+          CIBW_TEST_COMMAND_WINDOWS: >
+            cd {project} &&
+            python -c "import sys, subprocess; env='py{}{}'.format(*sys.version_info[:2]); exit(subprocess.call(['tox', '-e', env, '--', '-v']))"
+          CIBW_BUILD_VERBOSITY: 1
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip setuptools wheel
+      - name: Store wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-legacy-${{ matrix.os }}
+          path: ./wheelhouse/*.whl
+
+  build_wheels_modern:
+    name: Build modern wheels (3.9-3.13)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_ARCHS_MACOS: "x86_64 universal2 arm64"
           CIBW_BUILD: "cp3{9,10,11,12,13}-*"
-          CIBW_SKIP: "cp37-* cp38-*"
-          # Tests are now enabled
           CIBW_TEST_REQUIRES: tox
-          # Use a different test command for Python 3.13
           CIBW_TEST_COMMAND: >
             cd {project} &&
-            python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
-            if python -c "import sys; exit(0 if sys.version_info >= (3, 13) else 1)"; then
-              tox -e py313 -- -v
-            else
-              tox -e py -- -v
-            fi
+            python -c "import sys, subprocess; env='py{}{}'.format(*sys.version_info[:2]); exit(subprocess.call(['tox', '-e', env, '--', '-v']))"
           CIBW_TEST_COMMAND_WINDOWS: >
             cd {project} &&
-            python -c "import sys; from pprint import pprint; pprint(sys.version)" &&
-            python -c "import sys, subprocess; env = 'py313' if sys.version_info >= (3, 13) else 'py'; exit(subprocess.call(['tox', '-e', env, '--', '-v']))"
+            python -c "import sys, subprocess; env='py{}{}'.format(*sys.version_info[:2]); exit(subprocess.call(['tox', '-e', env, '--', '-v']))"
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Store wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ matrix.os }}-py${{ matrix.python-version }}
+          name: wheels-modern-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
   publish:
     name: Publish wheels to PyPI
-    needs: build_wheels
+    needs: [build_wheels_legacy, build_wheels_modern]
     runs-on: ubuntu-latest
 
     steps:
